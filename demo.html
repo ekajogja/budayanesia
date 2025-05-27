@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budayanesia - Demo Duolingo Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: var(--progress); }
+        }
+        .duo-green { background-color: #58cc02; }
+        .duo-light { background-color: #e5f9db; }
+        .duo-blue { background-color: #1cb0f6; }
+        .duo-yellow { background-color: #ffd800; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans" x-data="app()">
+    <div class="max-w-md mx-auto min-h-screen bg-white shadow-sm">
+        <!-- Header -->
+        <header class="duo-green text-white p-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-landmark text-2xl"></i>
+                    <h1 class="text-xl font-bold">BUDAYANESIA</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-gem text-yellow-400"></i>
+                        <span x-text="gems" class="ml-1 font-bold"></span>
+                    </div>
+                    <div class="h-8 w-8 bg-white rounded-full shadow-md hover:shadow-lg border-2 border-white hover:scale-110 transition-transform cursor-pointer"
+                         @click="showProfileModal = true; activeTab = 'profile'"
+                         x-tooltip="Profil Pengguna">
+                        <span x-text="selectedCulture ? cultures[selectedCulture].emoji : '👤'" class="flex items-center justify-center h-full"></span>
+                        <div x-show="notifications > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                            <span x-text="notifications"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Progress -->
+        <section class="p-4 duo-light">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-bold">Rangkaian Harian</span>
+                <span x-text="`🔥 ${streak} hari`" class="font-bold"></span>
+            </div>
+            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full duo-green rounded-full" 
+                     :style="`width: ${dailyProgress}%`"
+                     :class="{'animate-pulse': dailyProgress === 100}"></div>
+            </div>
+            <div class="mt-2 text-sm text-gray-600">
+                <span x-text="`${xpToday} XP hari ini`"></span>
+                <span class="float-right" x-text="`Level ${level}`"></span>
+            </div>
+        </section>
+
+        <!-- Peta Budaya -->
+        <section class="p-4">
+            <h2 class="font-bold text-lg mb-3 flex items-center">
+                <i class="fas fa-map-marked-alt text-blue-500 mr-2"></i>
+                Peta Budaya Indonesia
+            </h2>
+            <div class="grid grid-cols-4 gap-2 text-center">
+                <template x-for="(culture, index) in cultures" :key="index">
+                    <div @click="selectCulture(index)"
+                         class="p-2 rounded-lg border-2 cursor-pointer transition-all"
+                         :class="{
+                             'border-green-500 bg-green-50': culture.completed,
+                             'border-gray-200 hover:border-green-300': !culture.completed && selectedCulture !== index,
+                             'border-blue-400 bg-blue-50': selectedCulture === index
+                         }">
+                        <div class="text-2xl mb-1" x-text="culture.emoji"></div>
+                        <div class="text-xs font-medium" x-text="culture.name"></div>
+                        <div class="text-xs text-gray-500" x-text="culture.region"></div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- Pelajaran -->
+        <section class="p-4" x-show="selectedCulture !== null">
+            <h2 class="font-bold text-lg mb-3 flex items-center">
+                <i class="fas fa-book-open text-green-500 mr-2"></i>
+                Pelajaran Budaya
+            </h2>
+            
+            <div class="space-y-3">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold" x-text="cultures[selectedCulture].name"></h3>
+                    <p class="text-sm text-gray-600 mt-1" x-text="cultures[selectedCulture].description"></p>
+                    <button @click="startLesson()"
+                            class="duo-green hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-lg w-full mt-3 transition-all">
+                        Mulai Pelajaran
+                    </button>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-blue-800">Poin Kebijaksanaan</h3>
+                    <div class="flex justify-between items-center mt-2">
+                        <div class="text-sm text-blue-600">
+                            Total: <span x-text="wisdomPoints" class="font-bold"></span> PK
+                        </div>
+                        <div class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                            <i class="fas fa-trophy mr-1"></i>
+                            <span x-text="rank"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Sections -->
+        <div x-show="activeTab === 'learn'">
+            <div class="p-4">
+                <h2 class="font-bold text-lg mb-3 flex items-center">
+                    <i class="fas fa-seedling text-green-500 mr-2"></i>
+                    Pohon Pembelajaran
+                </h2>
+                
+                <div class="bg-white rounded-xl shadow-sm p-4">
+                    <!-- Progress Overview -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <div class="text-sm text-gray-500">Total Progress</div>
+                            <div class="font-bold" x-text="`${completedLessons}/25 Pelajaran`"></div>
+                        </div>
+                        <div class="w-1/2">
+                            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 rounded-full" 
+                                     :style="`width: ${(completedLessons/25)*100}%`"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Learning Tree -->
+                    <div class="space-y-6 mt-6">
+                        <template x-for="(level, index) in learningTree" :key="index">
+                            <div class="relative">
+                                <!-- Level Connector -->
+                                <div class="absolute left-5 top-8 bottom-0 w-0.5 bg-gray-300" 
+                                     :class="{'h-8': index > 0, 'h-full': index === learningTree.length-1}"></div>
+                                
+                                <!-- Level Card -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-white font-bold shadow-md"
+                                         :class="{
+                                             'bg-green-500': level.completed,
+                                             'bg-blue-500': level.unlocked && !level.completed,
+                                             'bg-gray-300': !level.unlocked
+                                         }">
+                                        <span x-text="index+1"></span>
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <h3 class="font-bold" x-text="level.title"></h3>
+                                        <p class="text-sm text-gray-600" x-text="level.description"></p>
+                                        
+                                        <!-- Lessons -->
+                                        <div class="grid grid-cols-5 gap-2 mt-2">
+                                            <template x-for="(lesson, lIndex) in level.lessons" :key="lIndex">
+                                                <div class="h-8 rounded-md flex items-center justify-center text-xs"
+                                                     :class="{
+                                                         'bg-green-100 text-green-800 border border-green-300': lesson.completed,
+                                                         'bg-blue-100 text-blue-800 border border-blue-300': lesson.unlocked && !lesson.completed,
+                                                         'bg-gray-100 text-gray-400': !lesson.unlocked
+                                                     }">
+                                                    <span x-text="lIndex+1"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="activeTab === 'rank'" class="p-4">
+            <h2 class="font-bold text-lg mb-3 flex items-center">
+                <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                Papan Peringkat
+            </h2>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="flex justify-between mb-4">
+                    <button @click="rankType = 'friends'" 
+                            class="px-4 py-2 rounded-lg"
+                            :class="{'duo-green text-white': rankType === 'friends', 'bg-gray-100': rankType !== 'friends'}">
+                        Teman
+                    </button>
+                    <button @click="rankType = 'global'" 
+                            class="px-4 py-2 rounded-lg"
+                            :class="{'duo-green text-white': rankType === 'global', 'bg-gray-100': rankType !== 'global'}">
+                        Global
+                    </button>
+                </div>
+                
+                <div class="space-y-3">
+                    <template x-for="(user, index) in rankings" :key="index">
+                        <div class="flex items-center p-3 border-b border-gray-100">
+                            <div class="w-8 text-center font-bold" 
+                                 :class="{'text-yellow-500': index === 0, 'text-gray-500': index > 0}">
+                                <span x-text="index + 1"></span>
+                            </div>
+                            <div class="ml-3 flex-1">
+                                <div class="font-medium" x-text="user.name"></div>
+                                <div class="text-xs text-gray-500" x-text="`${user.xp} XP`"></div>
+                            </div>
+                            <div class="text-sm font-bold" x-text="user.level"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Modal -->
+        <div x-show="showLessonModal" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+                 @click.away="showLessonModal = false">
+                <!-- Modal Header -->
+                <div class="duo-green text-white p-4 rounded-t-2xl flex justify-between items-center">
+                    <h3 class="font-bold text-lg" x-text="currentLesson.title"></h3>
+                    <button @click="showLessonModal = false" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Modal Content -->
+                <div class="p-6">
+                    <p class="mb-6" x-text="currentLesson.content"></p>
+                    
+                    <!-- Questions -->
+                    <template x-for="(question, qIndex) in currentLesson.questions" :key="qIndex">
+                        <div class="mb-6">
+                            <h4 class="font-bold mb-3" x-text="question.text"></h4>
+                            <div class="space-y-2">
+                                <template x-for="(option, oIndex) in question.options" :key="oIndex">
+                                    <button @click="selectedAnswer = oIndex"
+                                            class="w-full text-left p-3 rounded-lg border-2 transition-all"
+                                            :class="{
+                                                'border-green-500 bg-green-100': selectedAnswer === oIndex && selectedAnswer === question.correct,
+                                                'border-red-500 bg-red-100': selectedAnswer === oIndex && selectedAnswer !== question.correct,
+                                                'border-gray-200 hover:border-green-300': selectedAnswer === null,
+                                                'border-gray-200': selectedAnswer !== null && selectedAnswer !== oIndex
+                                            }">
+                                        <span x-text="option"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="p-4 border-t border-gray-200 flex justify-end">
+                    <button @click="completeLesson()"
+                            class="duo-green hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all"
+                            :disabled="selectedAnswer === null">
+                        Selesai
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div x-show="activeTab === 'profile'" class="p-4 pb-20">
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                <div class="w-24 h-24 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl">
+                    <span x-text="selectedCulture ? cultures[selectedCulture].emoji : '👤'"></span>
+                </div>
+                <h2 class="text-xl font-bold">Profil Pembelajar</h2>
+                <p class="text-gray-600 mb-4">Level <span x-text="level"></span> - <span x-text="rank"></span></p>
+                
+                <div class="bg-green-50 rounded-lg p-4 mb-4">
+                    <p class="font-medium">🔥 Rangkaian Harian: <span x-text="streak"></span> hari</p>
+                    <p class="text-sm">Terus pertahankan untuk dapat bonus!</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <p class="text-2xl font-bold" x-text="wisdomPoints"></p>
+                        <p class="text-xs">Poin Kebijaksanaan</p>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="text-2xl font-bold" x-text="completedLessons"></p>
+                        <p class="text-xs">Pelajaran Selesai</p>
+                    </div>
+                </div>
+
+                <div class="bg-purple-50 rounded-lg p-4 mb-6">
+                    <h3 class="font-bold mb-2">💡 Kata Hari Ini</h3>
+                    <p x-text="dailyQuotes[quoteIndex]"></p>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="font-bold mb-2">🏆 Pencapaian Terbaru</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center p-2 bg-gray-50 rounded-lg">
+                            <span class="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white mr-2">1</span>
+                            <span>Menyelesaikan level pertama</span>
+                        </div>
+                        <div class="flex items-center p-2 bg-gray-50 rounded-lg">
+                            <span class="w-6 h-6 bg-blue-400 rounded-full flex items-center justify-center text-white mr-2">2</span>
+                            <span>5 hari beruntun belajar</span>
+                        </div>
+                        <div class="flex items-center p-2 bg-gray-50 rounded-lg">
+                            <span class="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center text-white mr-2">3</span>
+                            <span>Menguasai 3 budaya</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Nav with Tooltips -->
+        <nav class="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-200 flex justify-around p-3">
+            <button @click="activeTab = 'learn'" 
+                    class="p-2 relative group"
+                    :class="{'text-green-500': activeTab === 'learn', 'text-gray-400': activeTab !== 'learn'}"
+                    x-tooltip="Pelajaran">
+                <i class="fas fa-home text-xl"></i>
+                <span class="absolute bottom-full mb-2 hidden group-hover:flex items-center justify-center left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
+                    Pelajaran
+                </span>
+            </button>
+            <button @click="showMapModal = true" 
+                    class="p-2 relative group"
+                    :class="{'text-green-500': activeTab === 'map', 'text-gray-400': activeTab !== 'map'}"
+                    x-tooltip="Peta Budaya">
+                <i class="fas fa-map text-xl"></i>
+                <span class="absolute bottom-full mb-2 hidden group-hover:flex items-center justify-center left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
+                    Peta Budaya
+                </span>
+            </button>
+            <button @click="activeTab = 'rank'" 
+                    class="p-2 relative group"
+                    :class="{'text-green-500': activeTab === 'rank', 'text-gray-400': activeTab !== 'rank'}"
+                    x-tooltip="Peringkat">
+                <i class="fas fa-trophy text-xl"></i>
+                <span class="absolute bottom-full mb-2 hidden group-hover:flex items-center justify-center left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
+                    Peringkat
+                </span>
+            </button>
+            <button @click="activeTab = 'profile'" 
+                    class="p-2 relative group"
+                    :class="{'text-green-500': activeTab === 'profile', 'text-gray-400': activeTab !== 'profile'}"
+                    x-tooltip="Profil">
+                <i class="fas fa-user text-xl"></i>
+                <span class="absolute bottom-full mb-2 hidden group-hover:flex items-center justify-center left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2">
+                    Profil
+                </span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        function app() {
+            return {
+                // State
+                streak: 5,
+                dailyProgress: 60,
+                xpToday: 120,
+                level: 7,
+                gems: 250,
+                wisdomPoints: 345,
+                rank: "Pemula",
+                selectedCulture: null,
+                showLearnModal: false,
+                showMapModal: false,
+                showRankModal: false,
+                showProfileModal: false,
+                
+                // Data
+                cultures: [
+                    {
+                        name: "Jawa",
+                        emoji: "🎭",
+                        region: "Jawa Tengah",
+                        description: "Pelajari filosofi hidup orang Jawa",
+                        completed: true
+                    },
+                    {
+                        name: "Batak",
+                        emoji: "🏔️",
+                        region: "Sumatera Utara",
+                        description: "Temukan semangat 'Horas'",
+                        completed: false
+                    },
+                    {
+                        name: "Bali",
+                        emoji: "🌺",
+                        region: "Pulau Dewata",
+                        description: "Kenali Tri Hita Karana",
+                        completed: false
+                    },
+                    {
+                        name: "Minang",
+                        emoji: "🏡",
+                        region: "Sumatera Barat",
+                        description: "Pahami adat matrilineal",
+                        completed: false
+                    }
+                ],
+
+                // Methods
+                selectCulture(index) {
+                    this.selectedCulture = index;
+                },
+                startLesson() {
+                    this.showLessonModal = true;
+                    const culture = this.cultures[this.selectedCulture];
+                    this.currentLesson = {
+                        title: `Pengenalan ${culture.name}`,
+                        content: culture.description,
+                        questions: [
+                            {
+                                text: `Apa salam khas dalam budaya ${culture.name}?`,
+                                options: this.getCultureQuestions(culture.name),
+                                correct: this.getCorrectAnswerIndex(culture.name)
+                            }
+                        ]
+                    };
+                },
+
+                getCultureQuestions(cultureName) {
+                    const questions = {
+                        "Jawa": ["Selamat pagi", "Sugeng enjing", "Halo", "Met pagi"],
+                        "Batak": ["Horas", "Selamat siang", "Halo", "Sampurasun"],
+                        "Bali": ["Om Swastiastu", "Selamat datang", "Hai", "Sugeng rawuh"],
+                        "Minang": ["Tabik pun", "Selamat sore", "Hello", "Salam sejahtera"]
+                    };
+                    return questions[cultureName] || ["Pilihan 1", "Pilihan 2", "Pilihan 3", "Pilihan 4"];
+                },
+
+                getCorrectAnswerIndex(cultureName) {
+                    const answers = {
+                        "Jawa": 1,
+                        "Batak": 0,
+                        "Bali": 0,
+                        "Minang": 0
+                    };
+                    return answers[cultureName] || 0;
+                },
+                
+                handleLessonClick(levelIndex, lessonIndex) {
+                    if (this.learningTree[levelIndex].lessons[lessonIndex].unlocked) {
+                        this.showLessonModal = true;
+                        this.currentLesson = {
+                            title: `${this.learningTree[levelIndex].title} - Pelajaran ${lessonIndex+1}`,
+                            content: `Materi tentang ${this.cultures[this.selectedCulture].name} level ${levelIndex+1}`,
+                            questions: [
+                                {
+                                    text: `Pertanyaan level ${levelIndex+1} tentang ${this.cultures[this.selectedCulture].name}`,
+                                    options: ["Jawaban 1", "Jawaban 2", "Jawaban Benar"],
+                                    correct: 2
+                                }
+                            ]
+                        };
+                    }
+                },
+                
+                completeLesson() {
+                    this.wisdomPoints += 10;
+                    this.completedLessons++;
+                    this.showLessonModal = false;
+                    // Update progress in learning tree
+                }
+            }
+        }
+    </script>
+</body>
+</html>

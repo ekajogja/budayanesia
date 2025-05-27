@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budayanesia - Demo Pembelajaran Budaya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #58cc02 0%, #36b900 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(88, 204, 2, 0.05) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 16px;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .demo-hint {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-container {
+            background: #f0f8ff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e6f3ff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-bubble {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-bubble::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            background: #e6f3ff;
+            height: 16px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #58cc02, #89e219);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: progress-shine 2s infinite;
+        }
+
+        @keyframes progress-shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .culture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .culture-card {
+            background: #fafafa;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .culture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(88, 204, 2, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .culture-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #58cc02;
+            box-shadow: 0 12px 32px rgba(88, 204, 2, 0.2);
+        }
+
+        .culture-card:hover::before {
+            opacity: 1;
+        }
+
+        .culture-card.selected {
+            border-color: #58cc02;
+            background: #f0fff0;
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(88, 204, 2, 0.3);
+        }
+
+        .culture-card.completed {
+            background: linear-gradient(135deg, #58cc02, #89e219);
+            color: white;
+            border-color: #58cc02;
+        }
+
+        .culture-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        .culture-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .culture-region {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lesson-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .lesson-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lesson-progress {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin: 16px 0 0 0;
+            overflow: hidden;
+        }
+
+        .lesson-progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .lesson-content {
+            padding: 24px;
+        }
+
+        .intro-card {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .question-card {
+            background: #f8f9ff;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: white;
+            border: 3px solid #e0e6ff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option:hover {
+            transform: translateX(4px);
+            border-color: #667eea;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: scale(1.02);
+        }
+
+        .option.correct {
+            border-color: #58cc02;
+            background: #f0fff0;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .option.wrong {
+            border-color: #ff4757;
+            background: #fff0f0;
+            animation: shake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #58cc02, #89e219);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(88, 204, 2, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(88, 204, 2, 0.4);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .fact-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fact-card::before {
+            content: '💡';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 4rem;
+            opacity: 0.2;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.2; transform: scale(1); }
+            to { opacity: 0.4; transform: scale(1.1); }
+        }
+
+        .celebration {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .celebration::before {
+            content: '🎉';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 3rem;
+            animation: celebrate 1s ease-in-out infinite;
+        }
+
+        .celebration::after {
+            content: '🎊';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 3rem;
+            animation: celebrate 1s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.1); }
+        }
+
+        .how-it-works {
+            background: #f8f9ff;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 16px 0;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .benefits-grid {
+            display: grid;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .benefit-card {
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .benefit-card:nth-child(1) { border-left-color: #58cc02; }
+        .benefit-card:nth-child(2) { border-left-color: #667eea; }
+        .benefit-card:nth-child(3) { border-left-color: #ff6b6b; }
+        .benefit-card:nth-child(4) { border-left-color: #4ecdc4; }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .culture-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🏛️ BUDAYANESIA</div>
+            <div class="tagline">Mengenal Budaya Nusantara dengan Fun!</div>
+            <div class="demo-hint">✨ Klik & Coba Sekarang!</div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="card">
+            <div class="section-title">📈 Progress Kamu</div>
+            <div class="progress-container">
+                <div class="stats-grid">
+                    <div class="stat-bubble">
+                        <div class="stat-number" id="daysStreak">0</div>
+                        <div class="stat-label">Hari Streak</div>
+                    </div>
+                    <div class="stat-bubble">
+                        <div class="stat-number" id="culturesLearned">0</div>
+                        <div class="stat-label">Budaya Dipelajari</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <div style="font-weight: 600; margin-bottom: 8px; color: #667eea;">Target Hari Ini 🎯</div>
+                    <div style="color: #666; margin-bottom: 12px;">Pelajari 1 budaya baru (5 menit)</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dailyProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Culture Selection -->
+        <div class="card">
+            <div class="section-title">🗺️ Pilih Budaya</div>
+            <p style="color: #666; margin-bottom: 20px; text-align: center;">
+                Tap salah satu untuk mulai petualangan budaya! 🚀
+            </p>
+            
+            <div class="culture-grid">
+                <div class="culture-card" data-culture="jawa">
+                    <span class="culture-emoji">🎭</span>
+                    <div class="culture-name">Budaya Jawa</div>
+                    <div class="culture-region">Jawa Tengah</div>
+                </div>
+                <div class="culture-card" data-culture="batak">
+                    <span class="culture-emoji">🏔️</span>
+                    <div class="culture-name">Budaya Batak</div>
+                    <div class="culture-region">Sumatera Utara</div>
+                </div>
+                <div class="culture-card" data-culture="bali">
+                    <span class="culture-emoji">🌺</span>
+                    <div class="culture-name">Budaya Bali</div>
+                    <div class="culture-region">Pulau Dewata</div>
+                </div>
+                <div class="culture-card" data-culture="minang">
+                    <span class="culture-emoji">🏡</span>
+                    <div class="culture-name">Budaya Minang</div>
+                    <div class="culture-region">Sumatera Barat</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Content -->
+        <div class="card lesson-container hidden" id="lessonContent">
+            <div class="lesson-header">
+                <h2 id="lessonTitle">📚 Pelajaran Budaya</h2>
+                <div style="font-size: 0.9rem; opacity: 0.9; margin-top: 8px;">
+                    Pelajaran <span id="lessonStep">1</span> dari 3
+                </div>
+                <div class="lesson-progress">
+                    <div class="lesson-progress-fill" id="lessonProgressBar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="lesson-content">
+                <!-- Introduction -->
+                <div id="introSection">
+                    <div class="intro-card">
+                        <h3 style="margin-bottom: 16px; font-size: 1.2rem;">🎭 Selamat Datang!</h3>
+                        <p id="introText" style="line-height: 1.6; margin-bottom: 16px;"></p>
+                        <div style="background: rgba(255,255,255,0.3); padding: 12px; border-radius: 8px; margin-top: 16px;">
+                            <strong id="keywordText"></strong>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="btn" onclick="nextStep()">Yuk Mulai! 🚀</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Section -->
+                <div class="hidden" id="quizSection">
+                    <div class="question-card">
+                        <div class="question-text" id="questionText">
+                            Anda bertemu orang yang lebih tua di Jawa. Cara menyapa yang paling sopan?
+                        </div>
+                    </div>
+                    
+                    <div class="options-container">
+                        <div class="option" data-answer="wrong" onclick="selectAnswer(this)">
+                            "Hai, apa kabar?" sambil melambaikan tangan
+                        </div>
+                        <div class="option" data-answer="correct" onclick="selectAnswer(this)">
+                            "Sugeng enjing, Pak/Bu" sambil sedikit membungkuk
+                        </div>
+                        <div class="option" data-answer="wrong" onclick="selectAnswer(this)">
+                            Langsung bicara tanpa menyapa
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn" id="checkAnswer" onclick="checkQuizAnswer()" disabled>Cek Jawaban ✨</button>
+                        <button class="btn hidden" id="nextQuestion" onclick="nextQuestion()">Lanjut 🎯</button>
+                    </div>
+                </div>
+
+                <!-- Cultural Fact -->
+                <div class="fact-card hidden" id="culturalFact">
+                    <h3 style="margin-bottom: 16px; font-size: 1.2rem;">💡 Fun Fact!</h3>
+                    <p id="factText" style="line-height: 1.6;"></p>
+                    <div style="margin-top: 20px;">
+                        <button class="btn" onclick="completeLesson()">Selesai! 🎉</button>
+                    </div>
+                </div>
+
+                <!-- Lesson Complete -->
+                <div class="celebration hidden" id="lessonComplete">
+                    <h2 style="margin-bottom: 16px;">Keren Banget! 🎉</h2>
+                    <p style="margin-bottom: 16px; font-size: 1.1rem;">
+                        Kamu berhasil menyelesaikan pelajaran pertama!
+                    </p>
+                    <div style="background: rgba(255,255,255,0.3); padding: 16px; border-radius: 12px; margin: 20px 0;">
+                        <strong>🏆 +15 Poin Kebijaksanaan!</strong>
+                    </div>
+                    <button class="btn" onclick="resetDemo()">Coba Budaya Lain 🗺️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card">
+            <div class="section-title">🔥 Gimana Cara Kerjanya?</div>
+            <div class="how-it-works">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>Pilih Budaya Favoritmu</strong><br>
+                        <span style="color: #666; font-size: 0.9rem;">Mulai dari yang paling menarik!</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>Belajar Sambil Main</strong><br>
+                        <span style="color: #666; font-size: 0.9rem;">Cuma 5 menit per hari, dijamin seru!</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>Kumpulkan Poin</strong><br>
+                        <span style="color: #666; font-size: 0.9rem;">Jadi expert budaya Indonesia!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="card">
+            <div class="section-title">✨ Kenapa Keren?</div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <strong>🤝 Nggak Ada Lagi Prasangka</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Paham budaya lain = lebih toleran!</span>
+                </div>
+                <div class="benefit-card">
+                    <strong>🏛️ Jaga Warisan Nenek Moyang</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Budaya Indonesia tetap lestari</span>
+                </div>
+                <div class="benefit-card">
+                    <strong>🎒 Traveling Makin Asik</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Tau budaya lokal, wisata lebih berkesan</span>
+                </div>
+                <div class="benefit-card">
+                    <strong>🇮🇩 Indonesia Lebih Bersatu</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Bhinneka Tunggal Ika for real!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>✨ Budayanesia - Dibangun dengan ❤️ untuk Indonesia</p>
+            <p style="margin-top: 10px;">
+                <a style="font-size: 0.8rem; text-decoration: none; color: white;" href="https://github.com/ekajogja/budayanesia" target="_blank">Mari berkontribusi via Github!</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let selectedCulture = '';
+        let userStats = {
+            daysStreak: 0,
+            culturesLearned: 0,
+            wisdomPoints: 0
+        };
+
+        const cultures = {
+            jawa: {
+                name: 'Budaya Jawa',
+                emoji: '🎭',
+                intro: 'Budaya Jawa penuh dengan filosofi hidup yang keren! Mereka punya konsep "unggah-ungguh" - cara bicara yang disesuaikan dengan lawan bicara. Kece banget kan?',
+                keyword: '"Unggah-Ungguh" - Seni berkomunikasi dengan sopan'
+            },
+            batak: {
+                name: 'Budaya Batak',
+                emoji: '🏔️',
+                intro: 'Budaya Batak terkenal dengan semangat "Horas!" yang artinya sehat dan bahagia. Mereka punya sistem marga yang super unik untuk menjaga persaudaraan.',
+                keyword: '"Horas!" - Salam kehidupan yang penuh semangat'
+            },
+            bali: {
+                name: 'Budaya Bali',
+                emoji: '🌺',
+                intro: 'Budaya Bali punya filosofi "Tri Hita Karana" - tiga sumber kebahagiaan: hubungan baik dengan Tuhan, sesama, dan alam. Filosofi yang balance banget!',
+                keyword: '"Om Swastiastu" - Salam kedamaian universal'
+            },
+            minang: {
+                name: 'Budaya Minang',
+                emoji: '🏡',
+                intro: 'Budaya Minang terkenal dengan sistem matrilineal dan rumah gadang yang ikonik. Mereka punya filosofi "Adat basandi syarak, syarak basandi Kitabullah".',
+                keyword: '"Adat Minangkabau" - Kebijaksanaan turun temurun'
+            }
+        };
+
+        const questions = {
+            jawa: [
+                {
+                    question: "Anda bertemu orang yang lebih tua di Jawa. Cara menyapa yang paling sopan?",
+                    options: [
+                        { text: '"Hai, apa kabar?" sambil melambaikan tangan', correct: false },
+                        { text: '"Sugeng enjing, Pak/Bu" sambil sedikit membungkuk', correct: true },
+                        { text: 'Langsung bicara tanpa menyapa', correct: false }
+                    ],
+                    fact: "Dalam budaya Jawa, unggah-ungguh sangat penting. Bahasa dan gesture harus disesuaikan dengan status dan umur lawan bicara. Ini menunjukkan rasa hormat dan menjaga keharmonisan sosial."
+                }
+            ],
+            batak: [
+                {
+                    question: "Ketika diundang ke pesta Batak, apa yang harus Anda lakukan?",
+                    options: [
+                        { text: 'Datang tepat waktu dan duduk diam', correct: false },
+                        { text: 'Berteriak "Horas!" dan ikut menari tor-tor', correct: true },
+                        { text: 'Membawa makanan sendiri dari rumah', correct: false }
+                    ],
+                    fact: "Budaya Batak sangat menghargai kegembiraan bersama. 'Horas!' adalah ekspresi kebahagiaan dan semangat hidup. Tarian tor-tor adalah cara mengekspresikan sukacita dan persatuan dalam komunitas."
+                }
+            ],
+            bali: [
+                {
+                    question: "Filosofi Tri Hita Karana dalam budaya Bali mengajarkan keharmonisan dengan:",
+                    options: [
+                        { text: 'Hanya dengan Tuhan saja', correct: false },
+                        { text: 'Tuhan, sesama manusia, dan alam', correct: true },
+                        { text: 'Hanya dengan alam saja', correct: false }
+                    ],
+                    fact: "Tri Hita Karana adalah filosofi hidup Bali yang menciptakan keseimbangan sempurna. Parhyangan (hubungan dengan Tuhan), Pawongan (hubungan dengan sesama), dan Palemahan (hubungan dengan alam) harus seimbang untuk mencapai kebahagiaan sejati."
+                }
+            ],
+            minang: [
+                {
+                    question: "Dalam adat Minangkabau, siapa yang memegang peran penting dalam keluarga?",
+                    options: [
+                        { text: 'Ayah sebagai kepala keluarga', correct: false },
+                        { text: 'Ibu dan garis keturunan perempuan', correct: true },
+                        { text: 'Anak laki-laki tertua', correct: false }
+                    ],
+                    fact: "Minangkabau menganut sistem matrilineal, di mana garis keturunan dan warisan diturukan melalui garis ibu. Ini membuat perempuan memiliki posisi yang sangat terhormat dalam struktur sosial Minang."
+                }
+            ]
+        };
+
+        // Initialize demo
+        function initDemo() {
+            updateStats();
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            document.querySelectorAll('.culture-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    selectCulture(this.dataset.culture);
+                });
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('daysStreak').textContent = userStats.daysStreak;
+            document.getElementById('culturesLearned').textContent = userStats.culturesLearned;
+        }
+
+        function selectCulture(cultureKey) {
+            selectedCulture = cultureKey;
+            
+            // Update visual selection
+            document.querySelectorAll('.culture-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-culture="${cultureKey}"]`).classList.add('selected');
+            
+            // Start lesson
+            setTimeout(() => {
+                startLesson(cultureKey);
+            }, 500);
+        }
+
+        function startLesson(cultureKey) {
+            const culture = cultures[cultureKey];
+            currentStep = 0;
+            
+            // Hide culture selection, show lesson
+            document.querySelector('[class*="culture-grid"]').closest('.card').style.display = 'none';
+            document.getElementById('lessonContent').classList.remove('hidden');
+            
+            // Set lesson content
+            document.getElementById('lessonTitle').innerHTML = `${culture.emoji} ${culture.name}`;
+            document.getElementById('introText').textContent = culture.intro;
+            document.getElementById('keywordText').textContent = culture.keyword;
+            
+            // Reset lesson progress
+            updateLessonProgress(0);
+            
+            // Show intro section
+            showSection('introSection');
+        }
+
+        function nextStep() {
+            currentStep++;
+            updateLessonProgress((currentStep / 3) * 100);
+            
+            if (currentStep === 1) {
+                showSection('quizSection');
+                loadQuestion();
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[selectedCulture][0];
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.querySelector('.options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.dataset.answer = option.correct ? 'correct' : 'wrong';
+                optionEl.textContent = option.text;
+                optionEl.onclick = () => selectAnswer(optionEl);
+                optionsContainer.appendChild(optionEl);
+            });
+        }
+
+        function selectAnswer(element) {
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Mark selected
+            element.classList.add('selected');
+            
+            // Enable check button
+            document.getElementById('checkAnswer').disabled = false;
+        }
+
+        function checkQuizAnswer() {
+            const selectedOption = document.querySelector('.option.selected');
+            const isCorrect = selectedOption.dataset.answer === 'correct';
+            
+            // Show answer feedback
+            document.querySelectorAll('.option').forEach(option => {
+                if (option.dataset.answer === 'correct') {
+                    option.classList.add('correct');
+                } else if (option.classList.contains('selected') && !isCorrect) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            // Hide check button, show next
+            document.getElementById('checkAnswer').classList.add('hidden');
+            document.getElementById('nextQuestion').classList.remove('hidden');
+            
+            // Update daily progress
+            document.getElementById('dailyProgress').style.width = '100%';
+        }
+
+        function nextQuestion() {
+            currentStep++;
+            updateLessonProgress((currentStep / 3) * 100);
+            
+            // Show cultural fact
+            const fact = questions[selectedCulture][0].fact;
+            document.getElementById('factText').textContent = fact;
+            showSection('culturalFact');
+        }
+
+        function completeLesson() {
+            currentStep = 3;
+            updateLessonProgress(100);
+            
+            // Update user stats
+            userStats.culturesLearned++;
+            userStats.daysStreak++;
+            userStats.wisdomPoints += 15;
+            
+            // Mark culture as completed
+            document.querySelector(`[data-culture="${selectedCulture}"]`).classList.add('completed');
+            
+            showSection('lessonComplete');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            ['introSection', 'quizSection', 'culturalFact', 'lessonComplete'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            
+            // Show target section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update lesson step indicator
+            document.getElementById('lessonStep').textContent = currentStep + 1;
+        }
+
+        function updateLessonProgress(percentage) {
+            document.getElementById('lessonProgressBar').style.width = percentage + '%';
+        }
+
+        function resetDemo() {
+            // Reset lesson state
+            currentStep = 0;
+            selectedCulture = '';
+            
+            // Update stats display
+            updateStats();
+            
+            // Show culture selection, hide lesson
+            document.querySelector('[class*="culture-grid"]').closest('.card').style.display = 'block';
+            document.getElementById('lessonContent').classList.add('hidden');
+            
+            // Reset selections
+            document.querySelectorAll('.culture-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Reset daily progress
+            document.getElementById('dailyProgress').style.width = '0%';
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initDemo);
+    </script>
+</body>
+</html>
