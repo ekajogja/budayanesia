@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konsep Budayanesia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .prose a {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .prose a:hover {
+            color: #2563eb;
+        }
+        .dark .prose {
+            color: #e5e7eb;
+        }
+        .dark .prose a {
+            color: #93c5fd;
+        }
+        .dark .prose a:hover {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-green-500 text-white p-4">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-landmark text-2xl"></i>
+                <h1 class="text-xl font-bold">BUDAYANESIA</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                    <i x-show="!darkMode" class="fas fa-moon"></i>
+                    <i x-show="darkMode" class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-col lg:flex-row min-h-[calc(100vh-56px)]">
+        <!-- Sidebar Navigation -->
+        <div class="w-full lg:w-64 bg-white dark:bg-gray-800 shadow-md p-4 lg:h-[calc(100vh-56px)] lg:sticky lg:top-14 overflow-y-auto">
+            <nav class="space-y-1">
+                <a href="#1-konsep-inti" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-lightbulb text-green-500 w-5"></i>
+                    <span>1. Konsep Inti</span>
+                </a>
+                <a href="#2-sumber-data-resmi" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-database text-blue-500 w-5"></i>
+                    <span>2. Sumber Data</span>
+                </a>
+                <a href="#3-mekanisme-terinspirasi-duolingo" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-gamepad text-purple-500 w-5"></i>
+                    <span>3. Mekanisme</span>
+                </a>
+                <a href="#4-kerangka-kurikulum-budaya" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-graduation-cap text-yellow-500 w-5"></i>
+                    <span>4. Kurikulum</span>
+                </a>
+                <a href="#5-antarmuka-terinspirasi-duolingo" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-mobile-screen text-red-500 w-5"></i>
+                    <span>5. Antarmuka</span>
+                </a>
+                <a href="#6-implementasi-teknis" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-code text-indigo-500 w-5"></i>
+                    <span>6. Teknis</span>
+                </a>
+                <a href="#7-model-monetisasi" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-coins text-green-600 w-5"></i>
+                    <span>7. Monetisasi</span>
+                </a>
+                <a href="#8-strategi-go-to-market" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-chart-line text-blue-600 w-5"></i>
+                    <span>8. Go-To-Market</span>
+                </a>
+                <a href="#9-potensi-kemitraan-pemerintah" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-handshake text-purple-600 w-5"></i>
+                    <span>9. Kemitraan</span>
+                </a>
+                <a href="#10-metrik-keberhasilan--kpi" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-chart-pie text-yellow-600 w-5"></i>
+                    <span>10. Metrik</span>
+                </a>
+                <a href="#11-visi-masa-depan" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-eye text-red-600 w-5"></i>
+                    <span>11. Visi</span>
+                </a>
+                <a href="#12-keunggulan-kompetitif" class="flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-trophy text-indigo-600 w-5"></i>
+                    <span>12. Keunggulan</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 lg:p-8 overflow-auto">
+            <div class="max-w-4xl mx-auto prose dark:prose-invert prose-lg">
+                <h1 class="text-3xl font-bold mb-2">BUDAYANESIA</h1>
+                <p class="text-xl italic mb-8">"<i>Duolingo</i> untuk Khazanah Budaya Nusantara"</p>
+                <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                <!-- Section 1: Konsep Inti -->
+                <section id="1-konsep-inti" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-green-500"></i>
+                        1. KONSEP INTI
+                    </h2>
+                    <p><strong>Budayanesia</strong> adalah aplikasi pembelajaran budaya interaktif yang mengadopsi model sukses <a href="https://www.duolingo.com/" class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">Duolingo</a>, tetapi fokus pada keragaman budaya Indonesia.</p>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-project-diagram text-green-400"></i>
+                        1.1. Analogi Inti
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <thead>
+                                <tr class="bg-green-500 text-white">
+                                    <th class="py-2 px-4 border-b">Duolingo</th>
+                                    <th class="py-2 px-4 border-b">Budayanesia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Bahasa Spanyol</td>
+                                    <td class="py-2 px-4 border-b">Budaya Jawa</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Bahasa Prancis</td>
+                                    <td class="py-2 px-4 border-b">Budaya Batak</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Bahasa Jerman</td>
+                                    <td class="py-2 px-4 border-b">Budaya Dayak</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Rangkaian Harian</td>
+                                    <td class="py-2 px-4 border-b">Perjalanan Budaya</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Pohon Bahasa</td>
+                                    <td class="py-2 px-4 border-b">Peta Budaya</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Poin XP</td>
+                                    <td class="py-2 px-4 border-b">Poin Kebijaksanaan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-bullseye text-green-400"></i>
+                        1.2. Proposisi Nilai
+                    </h3>
+                    <blockquote class="border-l-4 border-green-500 pl-4 italic bg-green-50 dark:bg-green-900/30 p-4 rounded">
+                        "Seperti <i>Duolingo</i> membuat belajar bahasa menjadi menyenangkan dan mudah diakses, <strong>Budayanesia</strong> membuat mengenal budaya Indonesia menjadi menarik dan bermakna."
+                    </blockquote>
+                </section>
+
+                <!-- Section 2: Sumber Data Resmi -->
+                <section id="2-sumber-data-resmi" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-database text-blue-500"></i>
+                        2. SUMBER DATA RESMI
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-list-check text-blue-400"></i>
+                        2.1. Sumber Data Utama:
+                    </h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <a href="https://ppkd.kemenbud.go.id/profil-budaya-daerah" class="hover:underline">Profil Budaya Daerah - PPKD Kemenbud</a>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <a href="https://dapobud.kemenbud.go.id/" class="hover:underline">Data Pokok Kebudayaan - Dapobud Kemenbud</a>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-green-500 mt-1"></i>
+                            <a href="https://budaya-indonesia.org/" class="hover:underline">Perpustakaan Digital Budaya Indonesia</a>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-diagram-project text-blue-400"></i>
+                        2.2. Struktur Data dari Kemendikbud
+                    </h3>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                        <div class="flex flex-wrap gap-4 justify-center">
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded-lg shadow">
+                                <div class="font-bold text-center mb-2">PROVINSI (34)</div>
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div class="bg-blue-100 dark:bg-blue-900 p-1 rounded text-center">KABUPATEN/KOTA (514)</div>
+                                    <div class="bg-green-100 dark:bg-green-900 p-1 rounded text-center">SUKU BANGSA (1.340+)</div>
+                                    <div class="bg-purple-100 dark:bg-purple-900 p-1 rounded text-center">BAHASA DAERAH (700+)</div>
+                                    <div class="bg-yellow-100 dark:bg-yellow-900 p-1 rounded text-center">WARISAN BUDAYA (11.000+)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-tags text-blue-400"></i>
+                        2.3. Kategorisasi Budaya
+                    </h3>
+                    <p>Kategorisasi sesuai 10 Objek Pemajuan Kebudayaan</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold">1. Tradisi Lisan</h4>
+                            <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                                <li>Cerita rakyat, pantun, syair, mantra</li>
+                                <li>Contoh: Dongeng, pepatah, bidal</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold">2. Manuskrip</h4>
+                            <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                                <li>Naskah kuno, prasasti, dokumen tradisional</li>
+                            </ul>
+                        </div>
+                        <!-- More categories would go here -->
+                    </div>
+                </section>
+
+                <!-- Section 3: Mekanisme Terinspirasi Duolingo -->
+                <section id="3-mekanisme-terinspirasi-duolingo" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-gamepad text-purple-500"></i>
+                        3. MEKANISME TERINSPIRASI DUOLINGO
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-project-diagram text-purple-400"></i>
+                        3.1. JALUR PEMBELAJARAN BERTAHAP
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-purple-500">
+                            <h4 class="font-bold text-purple-600 dark:text-purple-400">DUOLINGO</h4>
+                            <div class="mt-2 space-y-2">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-arrow-right text-purple-400 mt-1"></i>
+                                    <span>Dasar → Frasa → Keluarga → Makanan → Perjalanan</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold text-green-600 dark:text-green-400">BUDAYANESIA</h4>
+                            <div class="mt-2 space-y-2">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-arrow-right text-green-400 mt-1"></i>
+                                    <span>Pengenalan → Sejarah → Tradisi → Filosofi → Kontemporer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-trophy text-purple-400"></i>
+                        3.2. ELEMEN GAMIFIKASI
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold flex items-center gap-2">
+                                <i class="fas fa-fire text-yellow-500"></i>
+                                Sistem Penilaian
+                            </h4>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Rangkaian Budaya
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Rangkaian Kebijaksanaan
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Tantangan Regional
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold flex items-center gap-2">
+                                <i class="fas fa-star text-blue-500"></i>
+                                Sistem XP & Pencapaian
+                            </h4>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Poin Kebijaksanaan (PK)
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Permata Budaya
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Peringkat Penjelajah
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                            <h4 class="font-bold flex items-center gap-2">
+                                <i class="fas fa-chart-line text-green-500"></i>
+                                Pelacakan Kemajuan
+                            </h4>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Penyelesaian Budaya
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Peta Regional
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Pohon Pengetahuan
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: Kerangka Kurikulum Budaya -->
+                <section id="4-kerangka-kurikulum-budaya" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap text-yellow-500"></i>
+                        4. KERANGKA KURIKULUM BUDAYA
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-layer-group text-yellow-400"></i>
+                        Tingkat 1: Kelompok Budaya Utama (12 Budaya)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <thead>
+                                <tr class="bg-yellow-500 text-white">
+                                    <th class="py-2 px-4 border-b">No</th>
+                                    <th class="py-2 px-4 border-b">Suku</th>
+                                    <th class="py-2 px-4 border-b">% Populasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">1</td>
+                                    <td class="py-2 px-4 border-b">Jawa</td>
+                                    <td class="py-2 px-4 border-b">40%</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">2</td>
+                                    <td class="py-2 px-4 border-b">Sunda</td>
+                                    <td class="py-2 px-4 border-b">15%</td>
+                                </tr>
+                                <!-- More rows would go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section 5: Antarmuka Terinspirasi Duolingo -->
+                <section id="5-antarmuka-terinspirasi-duolingo" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-mobile-screen text-red-500"></i>
+                        5. ANTARMUKA TERINSPIRASI DUOLINGO
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-layer-group text-red-400"></i>
+                        5.1. Tata Letak Layar Utama
+                    </h3>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                        <div class="font-mono text-sm bg-white dark:bg-gray-700 p-4 rounded">
+                            <div class="text-green-600">[RANGKAIAN HARIAN: 🔥 15 hari]</div>
+                            <div class="text-blue-600">[PELAJARAN SAAT INI: Budaya Batak - Tradisi Ulos]</div><br>
+                            <div class="font-bold">PETA KEMAJUAN:</div>
+                            <div class="ml-4">
+                                <div>✅ Jawa (80% selesai)</div>
+                                <div>🔄 Batak (40% selesai)</div>
+                                <div>🔒 Dayak (terkunci)</div>
+                                <div>🔒 Papua (terkunci)</div>
+                            </div><br>
+                            <div class="font-bold">TARGET HARI INI:</div>
+                            <div class="ml-4">
+                                <div>□ Selesaikan 1 pelajaran budaya (5 PK)</div>
+                                <div>□ Latihan kuis kemarin (2 PK)</div>
+                                <div>□ Bagikan 1 wawasan budaya (3 PK)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-desktop text-red-400"></i>
+                        5.2. Fitur Antarmuka Utama
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-red-500">
+                            <h4 class="font-bold flex items-center gap-2">
+                                <i class="fas fa-list-check text-red-400"></i>
+                                Bilah Kemajuan
+                            </h4>
+                            <p class="mt-2 text-sm">Menampilkan progress pembelajaran secara visual</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold flex items-center gap-2">
+                                <i class="fas fa-user text-blue-400"></i>
+                                Avatar Karakter
+                            </h4>
+                            <p class="mt-2 text-sm">Tokoh budaya yang memandu pembelajaran</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 6: Implementasi Teknis -->
+                <section id="6-implementasi-teknis" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-code text-indigo-500"></i>
+                        6. IMPLEMENTASI TEKNIS
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-mobile text-indigo-400"></i>
+                        6.1. Arsitektur PWA
+                    </h3>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center text-sm">
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                <i class="fas fa-wifi-slash text-indigo-500 mb-1"></i>
+                                <div>Fitur Offline-First</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                <i class="fas fa-database text-indigo-500 mb-1"></i>
+                                <div>Konten Inti (Lokal)</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                <i class="fas fa-sync text-indigo-500 mb-1"></i>
+                                <div>Sinkronisasi</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                <i class="fas fa-question text-indigo-500 mb-1"></i>
+                                <div>Mode Kuis Offline</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-sitemap text-indigo-400"></i>
+                        6.2. Struktur Data
+                    </h3>
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
+                        <pre class="text-xs bg-white dark:bg-gray-700 p-4 rounded"><code>{
+  "budaya": "batak_toba",
+  "provinsi": "sumatera_utara",
+  "pelajaran": [
+    {
+      "id": "batak_001",
+      "judul": "Horas! Sapaan Batak",
+      "tipe": "pengantar",
+      "konten": {
+        "cerita": "...",
+        "fakta_budaya": "...",
+        "media": {
+          "audio": "pengucapan_horas.mp3",
+          "gambar": "salam_batak.jpg"
+        }
+      }
+    }
+  ]
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Section 7: Model Monetisasi -->
+                <section id="7-model-monetisasi" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-coins text-green-600"></i>
+                        7. MODEL MONETISASI
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-green-500"></i>
+                        7.1. Struktur Freemium
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold text-green-600 dark:text-green-400">GRATIS</h4>
+                            <ul class="mt-2 space-y-2 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    3 pelajaran/hari
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Konten dasar
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-green-500 mt-1"></i>
+                                    Iklan terbatas
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold text-blue-600 dark:text-blue-400">BUDAYANESIA PLUS</h4>
+                            <ul class="mt-2 space-y-2 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-blue-500 mt-1"></i>
+                                    Rp 30.000/bulan
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-blue-500 mt-1"></i>
+                                    Konten premium
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-blue-500 mt-1"></i>
+                                    Tanpa iklan
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border-l-4 border-purple-500">
+                            <h4 class="font-bold text-purple-600 dark:text-purple-400">PAKET KELUARGA</h4>
+                            <ul class="mt-2 space-y-2 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-purple-500 mt-1"></i>
+                                    Rp 120.000/bulan
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-purple-500 mt-1"></i>
+                                    Hingga 6 anggota
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-purple-500 mt-1"></i>
+                                    Laporan orang tua
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-money-bill-wave text-green-500"></i>
+                        7.2. Pendapatan Tambahan
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-umbrella-beach text-yellow-500 mb-1"></i>
+                            <div class="text-sm">Kemitraan Wisata Budaya</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-school text-blue-500 mb-1"></i>
+                            <div class="text-sm">Lisensi Pendidikan</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-briefcase text-purple-500 mb-1"></i>
+                            <div class="text-sm">Pelatihan Perusahaan</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-tshirt text-red-500 mb-1"></i>
+                            <div class="text-sm">Merchandise</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 8: Strategi Go-To-Market -->
+                <section id="8-strategi-go-to-market" class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-blue-600"></i>
+                        8. STRATEGI GO-TO-MARKET
+                    </h2>
+                    
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-calendar-check text-blue-500"></i>
+                        8.1. Fase Pengembangan
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <thead>
+                                <tr class="bg-blue-600 text-white">
+                                    <th class="py-2 px-4 border-b">Fase</th>
+                                    <th class="py-2 px-4 border-b">Durasi</th>
+                                    <th class="py-2 px-4 border-b">Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">MVP</td>
+                                    <td class="py-2 px-4 border-b">3 bulan</td>
+                                    <td class="py-2 px-4 border-b">5 budaya utama</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Pertumbuhan</td>
+                                    <td class="py-2 px-4 border-b">6 bulan</td>
+                                    <td class="py-2 px-4 border-b">12 budaya</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="py-2 px-4 border-b">Skala</td>
+                                    <td class="py-2 px-4 border-b">12 bulan</td>
+                                    <td class="py-2 px-4 border-b">50+ budaya</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+                        <i class="fas fa-bullhorn text-blue-500"></i>
+                        8.2. Saluran Pemasaran
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center text-sm">
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                            <i class="fab fa-instagram text-pink-500"></i>
+                            <div>Influencer</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                            <i class="fas fa-school text-blue-500"></i>
+                            <div>Sekolah</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                            <i class="fas fa-map-marked-alt text-green-500"></i>
+                            <div>Pariwisata</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                            <i class="fas fa-hashtag text-purple-500"></i>
+                            <div>#Tantangan</div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                            <i class="fab fa-google-play text-green-500"></i>
+                            <div>App Store</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <div class="mt-16 mb-8 text-center">
+                    <h3 class="text-xl font-bold mb-6">Siap mencoba Budayanesia?</h3>
+                    <a href="demo.html" class="inline-block relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-pulse">
+                        <span class="relative z-10 flex items-center justify-center gap-2">
+                            <i class="fas fa-play-circle"></i> Lihat Demo
+                        </span>
+                        <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-full"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-green-500 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>✨ Budayanesia - Dibangun dengan ❤️ untuk Indonesia</p>
+            <p class="mt-2">
+                <a href="https://github.com/ekajogja/budayanesia" class="text-sm underline hover:text-white/80" target="_blank">Mari berkontribusi via Github!</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+            class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</body>
+</html>
