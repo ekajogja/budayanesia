@@ -45,9 +45,38 @@
                     </div>
                 </div>
             </div>
-        </header>
+    </header>
 
-        <!-- Progress -->
+    <!-- Tour Overlay -->
+    <div x-show="isTourActive" class="fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity">
+        <div class="absolute bg-white rounded-lg shadow-xl p-4 max-w-sm transition-all"
+             :style="getTourPosition()">
+            <h3 class="font-bold text-lg mb-2" x-text="tourSteps[currentStep].title"></h3>
+            <p class="mb-4" x-text="tourSteps[currentStep].content"></p>
+            <div class="flex justify-between">
+                <button @click="prevStep()" 
+                        class="px-4 py-2 bg-gray-200 rounded-lg"
+                        :disabled="currentStep === 0">
+                    Kembali
+                </button>
+                <div>
+                    <span x-text="currentStep + 1"></span>/<span x-text="tourSteps.length"></span>
+                </div>
+                <div class="flex gap-2">
+                    <button @click="nextStep()" 
+                            class="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+                        <span x-text="currentStep === tourSteps.length - 1 ? 'Selesai' : 'Lanjut'"></span>
+                    </button>
+                    <button @click="completeTour()" 
+                            class="flex-1 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+                        Lewati
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress -->
         <section class="p-4 duo-light">
             <div class="flex justify-between items-center mb-2">
                 <span class="font-bold">Rangkaian Harian</span>
@@ -65,7 +94,7 @@
         </section>
 
         <!-- Peta Budaya -->
-        <section class="p-4">
+        <section class="p-4" id="culture-map">
             <h2 class="font-bold text-lg mb-3 flex items-center">
                 <i class="fas fa-map-marked-alt text-blue-500 mr-2"></i>
                 Peta Budaya Indonesia
@@ -104,7 +133,7 @@
                     </button>
                 </div>
 
-                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100" id="wisdom-points">
                     <h3 class="font-bold text-blue-800">Poin Kebijaksanaan</h3>
                     <div class="flex justify-between items-center mt-2">
                         <div class="text-sm text-blue-600">
@@ -121,7 +150,7 @@
 
         <!-- Main Content Sections -->
         <div x-show="activeTab === 'learn'">
-            <div class="p-4">
+            <div class="p-4" id="learning-tree">
                 <h2 class="font-bold text-lg mb-3 flex items-center">
                     <i class="fas fa-seedling text-green-500 mr-2"></i>
                     Pohon Pembelajaran
@@ -269,11 +298,16 @@
                 </div>
                 
                 <!-- Modal Footer -->
-                <div class="p-4 border-t border-gray-200 flex justify-end">
-                    <button @click="completeLesson()"
+                <div class="p-4 border-t border-gray-200 flex justify-between">
+                    <button @click="prevLesson()"
+                            class="px-4 py-2 bg-gray-200 rounded-lg"
+                            :disabled="!hasPrevLesson()">
+                        Kembali
+                    </button>
+                    <button @click="hasNextLesson() ? nextLesson() : completeLesson()"
                             class="duo-green hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all"
                             :disabled="selectedAnswer === null">
-                        Selesai
+                        <span x-text="hasNextLesson() ? 'Lanjut' : 'Selesai'"></span>
                     </button>
                 </div>
             </div>
@@ -387,6 +421,110 @@
     <script>
         function app() {
             return {
+                // Tour System
+                tourSteps: [
+                    {
+                        title: "Selamat Datang di Budayanesia!",
+                        content: "Ayo kita jelajahi cara belajar budaya Indonesia dengan cara menyenangkan seperti Duolingo!",
+                        target: null,
+                        position: "center",
+                        action: null
+                    },
+                    {
+                        title: "Peta Budaya Indonesia",
+                        content: "Pilih budaya yang ingin Anda pelajari dari peta ini. Mulailah dengan budaya Jawa sebagai contoh.",
+                        target: "#culture-map",
+                        position: "bottom",
+                        action: null
+                    },
+                    {
+                        title: "Aktifkan Pembelajaran",
+                        content: "Mengaktifkan tab pembelajaran untuk menampilkan pohon pembelajaran",
+                        target: null,
+                        position: "center",
+                        action: function() { this.activeTab = 'learn' }
+                    },
+                    {
+                        title: "Pohon Pembelajaran",
+                        content: "Setiap budaya memiliki pohon pembelajaran bertingkat. Selesaikan level untuk membuka level berikutnya!",
+                        target: "#learning-tree",
+                        position: "top",
+                        action: null
+                    },
+                    {
+                        title: "Pilih Budaya",
+                        content: "Memilih budaya Jawa untuk menampilkan poin kebijaksanaan",
+                        target: null,
+                        position: "center",
+                        action: function() { this.selectedCulture = 0 }
+                    },
+                    {
+                        title: "Sistem Poin",
+                        content: "Dapatkan Poin Kebijaksanaan (PK) dengan menyelesaikan pelajaran. Kumpulkan untuk naik level!",
+                        target: "#wisdom-points",
+                        position: "right",
+                        action: null
+                    }
+                ],
+                currentStep: 0,
+                isTourActive: true,
+                
+                // Tour Methods
+                nextStep() {
+                    // Jalankan action step saat ini jika ada
+                    const currentStep = this.tourSteps[this.currentStep];
+                    if (currentStep.action) {
+                        currentStep.action.call(this);
+                    }
+                    
+                    if (this.currentStep < this.tourSteps.length - 1) {
+                        this.currentStep++;
+                    } else {
+                        this.completeTour();
+                    }
+                },
+                prevStep() {
+                    if (this.currentStep > 0) this.currentStep--;
+                },
+                completeTour() {
+                    this.isTourActive = false;
+                    this.currentStep = 0;
+                },
+                startTour() {
+                    this.isTourActive = true;
+                    this.currentStep = 0;
+                },
+                getTourPosition() {
+                    const step = this.tourSteps[this.currentStep];
+                    if (!step.target) return 'top: 50%; left: 50%; transform: translate(-50%, -50%)';
+                    
+                    const targetEl = document.querySelector(step.target);
+                    if (!targetEl) return 'top: 50%; left: 50%; transform: translate(-50%, -50%)';
+                    
+                    const rect = targetEl.getBoundingClientRect();
+                    let top, left;
+                    
+                    switch(step.position) {
+                        case 'top':
+                            top = rect.top - 20;
+                            left = rect.left + rect.width/2;
+                            return `top: ${top}px; left: ${left}px; transform: translateX(-50%)`;
+                        case 'bottom':
+                            top = rect.bottom + 20;
+                            left = rect.left + rect.width/2;
+                            return `top: ${top}px; left: ${left}px; transform: translateX(-50%)`;
+                        case 'left':
+                            top = rect.top + rect.height/2;
+                            left = rect.left - 20;
+                            return `top: ${top}px; left: ${left}px; transform: translateY(-50%)`;
+                        case 'right':
+                            top = rect.top + rect.height/2;
+                            left = rect.right + 20;
+                            return `top: ${top}px; left: ${left}px; transform: translateY(-50%)`;
+                        default:
+                            return 'top: 50%; left: 50%; transform: translate(-50%, -50%)';
+                    }
+                },
                 // State
                 streak: 5,
                 dailyProgress: 60,
@@ -400,6 +538,8 @@
                 showMapModal: false,
                 showRankModal: false,
                 showProfileModal: false,
+                lessonStep: 'content', // 'content' or 'questions'
+                currentQuestionIndex: 0,
                 
                 // Data
                 cultures: [
@@ -407,29 +547,213 @@
                         name: "Jawa",
                         emoji: "🎭",
                         region: "Jawa Tengah",
-                        description: "Pelajari filosofi hidup orang Jawa",
-                        completed: true
+                        description: "Budaya Jawa kaya akan filosofi hidup seperti 'Unggah-ungguh' (kesopanan) dan 'Gotong Royong' (kerja sama). Pelajari cara salam khas Jawa, etika berbicara, dan nilai-nilai luhur lainnya.",
+                        completed: true,
+                        lessons: [
+                            {
+                                title: "Salam dan Etika",
+                                content: "Dalam budaya Jawa, penting menggunakan bahasa yang sesuai dengan usia dan status lawan bicara. 'Sugeng enjing' digunakan untuk menyapa di pagi hari dengan sopan.",
+                                questions: [
+                                    {
+                                        text: "Salam apa yang tepat untuk orang yang lebih tua di pagi hari?",
+                                        options: ["Halo", "Sugeng enjing", "Met pagi", "Selamat pagi"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Filosofi Gotong Royong",
+                                content: "Gotong Royong adalah tradisi kerja sama dalam menyelesaikan tugas bersama tanpa pamrih, mencerminkan semangat kebersamaan masyarakat Jawa.",
+                                questions: [
+                                    {
+                                        text: "Apa manfaat utama Gotong Royong?",
+                                        options: ["Mendapat uang", "Mempercepat pekerjaan", "Mempererat persaudaraan", "Menunjukkan kekuatan"],
+                                        correct: 2
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Seni Batik",
+                                content: "Batik Jawa memiliki motif yang sarat makna filosofis. Setiap corak seperti parang, kawung, dan truntum memiliki arti khusus dalam kehidupan masyarakat Jawa.",
+                                questions: [
+                                    {
+                                        text: "Apa makna motif parang pada batik Jawa?",
+                                        options: ["Kesederhanaan", "Kekuatan dan kepemimpinan", "Keindahan alam", "Kesuburan"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Wayang Kulit",
+                                content: "Wayang kulit adalah seni pertunjukan yang menggunakan boneka kulit. Cerita wayang biasanya diambil dari epik Mahabharata dan Ramayana, dengan penyesuaian nilai lokal Jawa.",
+                                questions: [
+                                    {
+                                        text: "Apa fungsi utama pertunjukan wayang kulit dalam masyarakat Jawa tradisional?",
+                                        options: ["Hiburan semata", "Pendidikan moral dan spiritual", "Pameran kekayaan", "Ritual pemanggilan arwah"],
+                                        correct: 1
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         name: "Batak",
                         emoji: "🏔️",
                         region: "Sumatera Utara",
-                        description: "Temukan semangat 'Horas'",
-                        completed: false
+                        description: "Budaya Batak dikenal dengan semangat 'Horas' dan sistem kekerabatan Dalihan Na Tolu. Pelajari tentang rumah adat, tarian tradisional, dan falsafah hidup masyarakat Batak.",
+                        completed: false,
+                        lessons: [
+                            {
+                                title: "Makna Horas",
+                                content: "Horas bukan sekadar salam, tapi mengandung doa dan harapan kebaikan untuk lawan bicara. Digunakan dalam berbagai kesempatan formal dan non-formal.",
+                                questions: [
+                                    {
+                                        text: "Apa makna sebenarnya dari 'Horas'?",
+                                        options: ["Selamat pagi", "Semoga berkah", "Apa kabar?", "Sampai jumpa"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Sistem Kekerabatan",
+                                content: "Dalihan Na Tolu adalah konsep tiga tungku sebagai dasar hubungan sosial: Dongan tubu (saudara semarga), Hula-hula (keluarga istri), dan Boru (keluarga suami).",
+                                questions: [
+                                    {
+                                        text: "Apa tiga unsur dalam Dalihan Na Tolu?",
+                                        options: ["Bapa, Inang, Anak", "Raja, Pendeta, Rakyat", "Dongan tubu, Hula-hula, Boru", "Pemuda, Dewasa, Tua"],
+                                        correct: 2
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Rumah Adat Batak",
+                                content: "Rumah adat Batak memiliki atap melengkung khas dan dibangun tanpa paku. Rumah bolon adalah jenis rumah adat utama yang menjadi pusat kehidupan keluarga besar.",
+                                questions: [
+                                    {
+                                        text: "Apa keunikan konstruksi rumah adat Batak?",
+                                        options: ["Dibangun tanpa paku", "Memiliki basement", "Terbuat dari batu bata", "Memiliki banyak jendela"],
+                                        correct: 0
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Musik Gondang",
+                                content: "Gondang adalah ensambel musik tradisional Batak yang terdiri dari taganing, sarune, dan hesek. Musik ini mengiringi berbagai upacara adat dan tarian tradisional.",
+                                questions: [
+                                    {
+                                        text: "Apa fungsi utama musik Gondang dalam budaya Batak?",
+                                        options: ["Hiburan semata", "Pengiring upacara adat", "Lagu pengantar tidur", "Musik untuk perang"],
+                                        correct: 1
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         name: "Bali",
                         emoji: "🌺",
                         region: "Pulau Dewata",
-                        description: "Kenali Tri Hita Karana",
-                        completed: false
+                        description: "Budaya Bali kaya akan upacara keagamaan dan seni. Filosofi Tri Hita Karana menekankan harmoni antara manusia, alam, dan Tuhan.",
+                        completed: false,
+                        lessons: [
+                            {
+                                title: "Tri Hita Karana",
+                                content: "Tri Hita Karana adalah filosofi Bali yang berarti tiga penyebab kesejahteraan: hubungan harmonis dengan Tuhan, sesama manusia, dan alam.",
+                                questions: [
+                                    {
+                                        text: "Apa arti Tri Hita Karana?",
+                                        options: ["Tiga dewa utama", "Tiga penyebab kesejahteraan", "Tiga gunung suci", "Tiga tahap kehidupan"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Upacara Ngaben",
+                                content: "Ngaben adalah upacara pembakaran jenazah untuk mengembalikan roh ke asalnya. Upacara ini merupakan prosesi yang meriah dan penuh makna.",
+                                questions: [
+                                    {
+                                        text: "Apa tujuan upacara Ngaben?",
+                                        options: ["Mengusir roh jahat", "Mengembalikan roh ke asalnya", "Merayakan kelahiran", "Memohon hujan"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Tari Kecak",
+                                content: "Tari Kecak adalah tarian yang menggambarkan kisah Ramayana. Tarian ini dibawakan oleh puluhan penari laki-laki yang duduk melingkar.",
+                                questions: [
+                                    {
+                                        text: "Kisah apa yang digambarkan dalam Tari Kecak?",
+                                        options: ["Mahabharata", "Ramayana", "Arjuna Wiwaha", "Calon Arang"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Sistem Subak",
+                                content: "Subak adalah sistem pengairan sawah tradisional Bali yang telah diakui UNESCO. Sistem ini mencerminkan kerja sama petani dalam mengelola air.",
+                                questions: [
+                                    {
+                                        text: "Apa keunikan sistem Subak?",
+                                        options: ["Menggunakan teknologi modern", "Kerja sama petani dalam pengelolaan air", "Hanya untuk sawah padi", "Ditemukan oleh pemerintah kolonial"],
+                                        correct: 1
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         name: "Minang",
                         emoji: "🏡",
                         region: "Sumatera Barat",
-                        description: "Pahami adat matrilineal",
-                        completed: false
+                        description: "Budaya Minang menganut sistem matrilineal. Selain itu, Minang juga terkenal dengan rumah gadang, randang, dan seni bela diri silek.",
+                        completed: false,
+                        lessons: [
+                            {
+                                title: "Sistem Matrilineal",
+                                content: "Sistem matrilineal Minang berarti garis keturunan diambil dari ibu. Harta pusaka diwariskan kepada perempuan, sementara laki-laki merantau.",
+                                questions: [
+                                    {
+                                        text: "Apa yang diwariskan kepada perempuan dalam sistem matrilineal?",
+                                        options: ["Gelar adat", "Harta pusaka", "Senjata pusaka", "Tanah ulayat"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Rumah Gadang",
+                                content: "Rumah gadang adalah rumah adat Minang dengan atap bergonjong. Rumah ini merupakan simbol budaya dan tempat musyawarah.",
+                                questions: [
+                                    {
+                                        text: "Apa ciri khas atap rumah gadang?",
+                                        options: ["Limas", "Joglo", "Bergonjong", "Pelana"],
+                                        correct: 2
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Randang dan Kuliner",
+                                content: "Randang adalah masakan daging yang dimasak dengan santan dan rempah dalam waktu lama. Masakan ini melambangkan kesabaran dan kebijaksanaan.",
+                                questions: [
+                                    {
+                                        text: "Apa filosofi di balik masakan randang?",
+                                        options: ["Kesederhanaan", "Kesabaran dan kebijaksanaan", "Kekayaan", "Persatuan"],
+                                        correct: 1
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Silek (Pencak Silat Minang)",
+                                content: "Silek adalah seni bela diri Minang yang berkembang sebagai bagian dari budaya merantau. Silek tidak hanya fisik, tapi juga mengandung nilai spiritual.",
+                                questions: [
+                                    {
+                                        text: "Apa fungsi silek bagi perantau Minang?",
+                                        options: ["Menunjukkan kekuatan", "Melindungi diri", "Menari di acara adat", "Olahraga kompetitif"],
+                                        correct: 1
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
 
@@ -440,17 +764,24 @@
                 startLesson() {
                     this.showLessonModal = true;
                     const culture = this.cultures[this.selectedCulture];
-                    this.currentLesson = {
-                        title: `Pengenalan ${culture.name}`,
-                        content: culture.description,
-                        questions: [
-                            {
-                                text: `Apa salam khas dalam budaya ${culture.name}?`,
-                                options: this.getCultureQuestions(culture.name),
-                                correct: this.getCorrectAnswerIndex(culture.name)
-                            }
-                        ]
-                    };
+                    
+                    // Gunakan konten baru jika tersedia
+                    if (culture.lessons && culture.lessons.length > 0) {
+                        this.currentLesson = culture.lessons[0];
+                    } else {
+                        // Fallback untuk budaya yang belum diupdate
+                        this.currentLesson = {
+                            title: `Pengenalan ${culture.name}`,
+                            content: culture.description,
+                            questions: [
+                                {
+                                    text: `Apa salam khas dalam budaya ${culture.name}?`,
+                                    options: this.getCultureQuestions(culture.name),
+                                    correct: this.getCorrectAnswerIndex(culture.name)
+                                }
+                            ]
+                        };
+                    }
                 },
 
                 getCultureQuestions(cultureName) {
@@ -494,7 +825,46 @@
                     this.wisdomPoints += 10;
                     this.completedLessons++;
                     this.showLessonModal = false;
-                    // Update progress in learning tree
+                },
+                
+                nextLesson() {
+                    const culture = this.cultures[this.selectedCulture];
+                    if (!culture.lessons) return;
+                    
+                    const currentIndex = culture.lessons.indexOf(this.currentLesson);
+                    if (currentIndex < culture.lessons.length - 1) {
+                        this.currentLesson = culture.lessons[currentIndex + 1];
+                        this.selectedAnswer = null;
+                    }
+                },
+                
+                prevLesson() {
+                    const culture = this.cultures[this.selectedCulture];
+                    if (!culture.lessons) return;
+                    
+                    const currentIndex = culture.lessons.indexOf(this.currentLesson);
+                    if (currentIndex > 0) {
+                        this.currentLesson = culture.lessons[currentIndex - 1];
+                        this.selectedAnswer = null;
+                    }
+                },
+                
+                hasNextLesson() {
+                    if (this.selectedCulture === null) return false;
+                    const culture = this.cultures[this.selectedCulture];
+                    if (!culture.lessons || culture.lessons.length < 2) return false;
+                    
+                    const currentIndex = culture.lessons.indexOf(this.currentLesson);
+                    return currentIndex < culture.lessons.length - 1;
+                },
+                
+                hasPrevLesson() {
+                    if (this.selectedCulture === null) return false;
+                    const culture = this.cultures[this.selectedCulture];
+                    if (!culture.lessons || culture.lessons.length < 2) return false;
+                    
+                    const currentIndex = culture.lessons.indexOf(this.currentLesson);
+                    return currentIndex > 0;
                 }
             }
         }
