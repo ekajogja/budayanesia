@@ -54,7 +54,7 @@ Dalam arsitektur, candi-candi megah seperti Prambanan dan Borobudur menjadi bukt
    c. Pencerita dan penggerak wayang +
    d. Penyanyi tembang
 
-8. Bahasa: Krama inggil digunakan untuk?
+8. Bahasa: Krama inggil paling tepat digunakan untuk?
    a. Berbicara dengan teman sebaya
    b. Menghormati orang yang lebih tua +
    c. Berbicara kepada bangsawan atau raja
@@ -224,7 +224,7 @@ Budaya Minangkabau atau Minang berkembang di Sumatera Barat dan sebagian Riau. K
 
 Tradisi merantau merupakan ciri khas orang Minang, terutama bagi laki-laki untuk mencari ilmu dan pengalaman. Rumah Gadang dengan atap gonjong yang menjulang tinggi menjadi ikon arsitektur Minangkabau yang terkenal di seluruh dunia.
 
-Kesenian Minang kaya dengan tari-tarian seperti Tari Piring, Tari Payung, dan Randai yang memadukan teater, tari, silat, dan musik. Kuliner Minang seperti rendang telah diakui dunia sebagai masakan terlezat, sementara sistem nagari sebagai pemerintahan tradisional masih bertahan hingga kini.
+Kesenian Minang kaya dengan tari-tarian seperti Tari Piring, Tari Payung, dan Randai yang memadukan teater, tari, silat, dan musik. Kuliner Minang seperti rendang telah diakui dunia sebagai masakan terlezat, sementara sistem nagari sebagai pemerintahan tradisional berbasis suku yang otonom masih bertahan hingga kini.
 
 ### 4.2. Kuis Minangkabau
 
@@ -312,11 +312,11 @@ Kuliner Betawi terkenal dengan cita rasa yang khas seperti kerak telor, soto Bet
    c. Babad Jakarta
    d. Naskah Ondel-ondel
 
-3. Adat Istiadat: Tradisi Ngaben dalam budaya Betawi dipengaruhi oleh?
-   a. Budaya Hindu Bali
-   b. Budaya Islam Arab
-   c. Budaya Tionghoa +
-   d. Budaya Jawa
+3. Adat Istiadat: Upacara Palang Pintu dalam pernikahan Betawi menunjukkan pengaruh?
+   a. Budaya Arab
+   b. Budaya Tionghoa
+   c. Budaya Eropa
+   d. Perpaduan berbagai budaya +
 
 4. Ritus: Upacara Siraman dalam pernikahan Betawi bertujuan untuk?
    a. Membersihkan diri secara fisik dan spiritual +
